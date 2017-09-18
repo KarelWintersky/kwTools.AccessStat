@@ -32,7 +32,7 @@ CREATE TABLE `banner_hits` (
 
 ```
 INSERT
-INTO `banner_list` (`alias`, `url`, `owner`,	`created` )
+INTO `banner_list` (`alias`, `url`, `owner`, `created` )
 VALUES ('d41d8cd98f00b204e9800998ecf8427e',	'NULL',	'root',	NOW());
 ```
 
