@@ -1,0 +1,22 @@
+<?php
+
+$connection = 'local';
+
+$all_settings = array(
+    'local'     =>  array(
+        'hostname'      =>  '',
+        'database'      =>  '',
+        'username'      =>  '',
+        'password'      =>  '',
+        'port'          =>  3306,
+    ),
+    'sweb'      =>  array(
+        'hostname'      =>  '',
+        'database'      =>  '',
+        'username'      =>  '',
+        'password'      =>  '',
+        'port'          =>  3306,
+    )
+);
+
+$settings = $all_settings[$connection];
