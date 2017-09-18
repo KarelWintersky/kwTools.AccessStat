@@ -7,23 +7,11 @@
 // get banners list
 require_once 'config.php';
 
-$stdout = '';
-
-$dsl = "mysql:host={$settings['hostname']};port={$settings['port']};dbname={$settings['database']}";
-
-// подключаемся к БД
-try {
-    $dbh = new \PDO($dsl, $settings['username'], $settings['password']);
-    $dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    $dbh->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-} catch (\PDOException $e) {
-    die ($e);
-}
-
 $q_banners_stat = "
 SELECT
 BL.id AS id,
 BL.url AS url,
+BL.alias AS alias,
 BL.owner AS banner_owner,
 IFNULL(SUM(BH.hits),0) AS hits_all,
 COUNT(BH.ipv4) AS hits_uniq
@@ -46,9 +34,9 @@ $all_banners = $sth->fetchAll();
     <title>Banner admin</title>
 </head>
 <body>
-    <form action="backend.php?action=add">
+    <form action="backend.php?action=add" method="POST">
         <ul>
-            <li>URL: <input type="text" size="80" name="url"></li>
+            <li>Page URL: <input type="text" size="80" name="url"></li>
             <li>Owner: <input type="text" size="80" name="owner"></li>
             <li>Password: <input type="text" size="80" name="password"></li>
             <li><input type="submit" value="Добавить"></li>
@@ -59,7 +47,8 @@ $all_banners = $sth->fetchAll();
     <thead>
     <tr>
         <th>id</th>
-        <th>url</th>
+        <th>Banner link</th>
+        <th>Page URL</th>
         <th>owner</th>
         <th>Total hits</th>
         <th>Unique hits</th>
@@ -68,10 +57,18 @@ $all_banners = $sth->fetchAll();
     </thead>
     <tbody>
 <?php
-foreach ($all_banners as $banner) {
-    echo <<<TR_BANNER
+if ($all_banners) {
+    foreach ($all_banners as $banner) {
+        $banner['alias'] = $GLOBAL_SETTINGS['global']['site_href'] . $banner['alias'];
+    }
+    $all_banners[0]['alias'] = '';
+    $all_banners[0]['url'] = $GLOBAL_SETTINGS['global']['site_href'];
+
+    foreach ($all_banners as $banner) {
+        echo <<<TR_BANNER
     <tr>
         <td>{$banner['id']}</td>
+        <td><code>{$banner['alias']}</code></td>
         <td>{$banner['url']}</td>
         <td>{$banner['banner_owner']}</td>
         <td>{$banner['hits_all']}</td>
@@ -79,7 +76,16 @@ foreach ($all_banners as $banner) {
         <td><a href="stats.php?id={$banner['id']}">Details &gt;&gt;&gt;</a></td>
     </tr>
 TR_BANNER;
+    }
+} else {
+    echo <<<TR_EMPTY
+    <tr>
+        <td colspan="7">No data.</td>
+    </tr>
+TR_EMPTY;
+
 }
+
 ?>
     </tbody>
 </table>

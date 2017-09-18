@@ -2,7 +2,11 @@
 
 $connection = 'local';
 
-$all_settings = array(
+$GLOBAL_SETTINGS = array(
+    'global'    =>  array(
+        'site_href' =>  '',
+        'password'  =>  '...'
+    ),
     'local'     =>  array(
         'hostname'      =>  '',
         'database'      =>  '',
@@ -19,4 +23,15 @@ $all_settings = array(
     )
 );
 
-$settings = $all_settings[$connection];
+$settings = $GLOBAL_SETTINGS[$connection];
+
+$dsl = "mysql:host={$settings['hostname']};port={$settings['port']};dbname={$settings['database']}";
+
+// подключаемся к БД
+try {
+    $dbh = new \PDO($dsl, $settings['username'], $settings['password']);
+    $dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    $dbh->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+} catch (\PDOException $e) {
+    die ($e->getMessage());
+}

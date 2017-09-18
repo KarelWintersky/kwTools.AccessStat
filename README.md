@@ -2,10 +2,19 @@
 
 
 
-# Required
+# INSTALL
 
-SQL Table:
+## Create tables:
 ```
+CREATE TABLE `banner_list` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `alias` char(32) CHARACTER SET latin1 DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `owner` varchar(16) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `banner_hits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_banner` int(11) DEFAULT NULL,
@@ -17,15 +26,14 @@ CREATE TABLE `banner_hits` (
   KEY `ipv4` (`ipv4`),
   KEY `id_banner` (`id_banner`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+```
 
-CREATE TABLE `banner_list` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `alias` char(8) CHARACTER SET latin1 DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `owner` varchar(16) DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+## Insert initial data
+
+```
+INSERT
+INTO `banner_list` (`alias`, `url`, `owner`,	`created` )
+VALUES ('d41d8cd98f00b204e9800998ecf8427e',	'NULL',	'root',	NOW());
 ```
 
 # Pages

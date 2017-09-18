@@ -12,17 +12,6 @@ if (!ctype_digit($id)) {
 
 require_once 'config.php';
 
-$dsl = "mysql:host={$settings['hostname']};port={$settings['port']};dbname={$settings['database']}";
-
-// подключаемся к БД
-try {
-    $dbh = new \PDO($dsl, $settings['username'], $settings['password']);
-    $dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    $dbh->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-} catch (\PDOException $e) {
-    die ($e);
-}
-
 $query = "
 SELECT dayvisit, ipv4 AS ipv4raw, INET_NTOA(ipv4) AS ipv4, hits FROM banner_hits
 WHERE id_banner = :id_banner
@@ -43,7 +32,11 @@ $info = $sth->fetchAll();
 $dbh = null;
 
 ?>
-
+<html>
+<head>
+    <title>Banner stats</title>
+</head>
+<body>
 <table border="1" width="40%">
     <thead>
     <tr>
@@ -77,3 +70,5 @@ TR_NOROWS;
     ?>
     </tbody>
 </table>
+</body>
+</html>

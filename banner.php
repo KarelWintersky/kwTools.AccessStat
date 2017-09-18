@@ -11,25 +11,14 @@ function getRealIP()
     return $ip;
 }
 
-$alias = strtolower( $_GET['id'] ?? NULL );
+$alias = strtolower( $_GET['alias'] ?? NULL );
 if (!ctype_alnum($alias)) {
-    // передан не хэш, а что попало. Рисуем просто
+    // передан не хэш, а что попало.
     http_response_code(404);
     die('Incorrect banner id recieved.');
 }
 
 require_once 'config.php';
-
-$dsl = "mysql:host={$settings['hostname']};port={$settings['port']};dbname={$settings['database']}";
-
-// подключаемся к БД
-try {
-    $dbh = new \PDO($dsl, $settings['username'], $settings['password']);
-    $dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    $dbh->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-} catch (\PDOException $e) {
-    die ($e);
-}
 
 // Проверяем, существует ли такой баннер?
 $query = "
