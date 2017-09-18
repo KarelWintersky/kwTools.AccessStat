@@ -26,7 +26,7 @@ VALUES (:alias,	:url, :owner, NOW());
         $sth = $dbh->prepare($query);
         try {
             $sth->execute( array(
-                'alias'     =>  md5($_POST['url']),
+                'alias'     =>  md5($_POST['owner'] . '/@/' . $_POST['url']),
                 'owner'     =>  $_POST['owner'],
                 'url'       =>  $_POST['url']
             ));

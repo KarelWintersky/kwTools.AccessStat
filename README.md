@@ -1,6 +1,11 @@
 # What is it?
 
+Баннеросчиталка
 
+# Особенности реализации
+
+Код написан с точки зрения максимально быстрой производительности ключевых частей. Поэтому не используются ни ООП, ни динамическая
+подгрузка файлов, ни шаблоны, ни фреймворки. Единственно, что используется - PDO.
 
 # INSTALL
 
@@ -38,9 +43,9 @@ VALUES ('d41d8cd98f00b204e9800998ecf8427e',	'NULL',	'root',	NOW());
 
 # Pages
 
-banner.php?id=N
-banner-stats.php?id=N
-
+/admin.php
+/banner.php?alias=N
+/stats.php?id=N
 
 # Stat
 
@@ -49,16 +54,19 @@ SELECT SUM(hits) FROM banner_hits WHERE id_banner = ...
 Количество уникальных хитов на определенную дату:
 SELECT COUNT(ipv4) FROM banner_hits WHERE id_banner = ...
 
-Список баннеров, имеющих хиты
+Список баннеров, имеющих хиты:
 
+```
 SELECT banner_list.id, banner_list.url, banner_list.owner, SUM(banner_hits.hits), COUNT(banner_hits.ipv4)
 FROM banner_hits, banner_list
 WHERE
 banner_list.id = banner_hits.id_banner
 GROUP BY banner_list.id
+```
 
 Список баннеров вообще
 
+```
 SELECT
 BL.id AS id,
 BL.url AS url,
@@ -71,6 +79,7 @@ RIGHT JOIN banner_list BL
 ON BL.id = BH.id_banner
 
 GROUP BY BL.id
+```
 
 
 
