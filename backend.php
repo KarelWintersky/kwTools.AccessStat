@@ -16,7 +16,7 @@ switch ($action) {
     }
     case 'add': {
         if ( strtolower( $_POST['password'] ?? NULL ) !== $GLOBAL_SETTINGS['global']['password']) {
-            die('Incorrect password');
+            die('Incorrect password. <a href="' . $_SERVER['HTTP_REFERER'] . '"> Back </a>');
         }
         $query = "
 INSERT
@@ -39,6 +39,35 @@ VALUES (:alias,	:url, :owner, NOW());
         // добавить баннер в базу
         break;
     }
+    case 'delete': {
+        $back_url = $_POST['back_url'];
+        // удалить баннер и его хиты из базы
+
+        if ( strtolower( $_POST['password'] ?? NULL ) !== $GLOBAL_SETTINGS['global']['password']) {
+            die('Incorrect password. <a href="' . $back_url . '"> Back </a>');
+        }
+        if ( $_POST['banner_id'] === 1) {
+            die('Can not delete this banner. <a href="' . $back_url . '"> Back </a>');
+        }
+
+        $query = "
+DELETE FROM `banner_hits` WHERE `id_banner` = :id; DELETE FROM `banner_list` WHERE `id` = :id ";
+        $sth = $dbh->prepare($query);
+        try {
+            $sth->execute( array(
+                'id'        =>  $_POST['banner_id']
+            ));
+        } catch (\PDOException $e) {
+            die($e->getMessage());
+        }
+        $dbh = null;
+        if (headers_sent() === false) die(header('Location: ' . $back_url));
+
+
+
+        break;
+    }
+
     default: {
         die('Incorrect action');
         break;

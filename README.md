@@ -41,11 +41,17 @@ INTO `banner_list` (`alias`, `url`, `owner`, `created` )
 VALUES ('d41d8cd98f00b204e9800998ecf8427e',	'NULL',	'root',	NOW());
 ```
 
+# How to use?
+
+- Add banner (password required)
+- Insert banner link to page as `<img src="url" />`
+
 # Pages
 
-/admin.php
-/banner.php?alias=N
-/stats.php?id=N
+- `/` - просто точка (заглушка)
+- `/admin.php` - админка по баннерам
+- `/banner.php?alias=N` - баннер с алиасом
+- `/stats.php?id=N` - статистика по "баннеру" по идентификатору
 
 # Stat
 

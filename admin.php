@@ -28,22 +28,23 @@ $sth = $dbh->query($q_banners_stat);
 $all_banners = $sth->fetchAll();
 
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
     <title>Banner admin</title>
 </head>
 <body>
     <form action="backend.php?action=add" method="POST">
-        <ul>
-            <li>Page URL: <input type="text" size="80" name="url"></li>
-            <li>Owner: <input type="text" size="80" name="owner"></li>
-            <li>Password: <input type="text" size="80" name="password"></li>
-            <li><input type="submit" value="Добавить"></li>
-        </ul>
+        <table>
+            <thead>New banner</thead>
+            <tr><td>Page URL: </td><td><input type="text" size="80" name="url"></td></tr>
+            <tr><td>Owner: </td><td><input type="text" size="80" name="owner"></td></tr>
+            <tr><td>Password: </td><td><input type="text" size="80" name="password"></td></tr>
+            <tr><td colspan="2"><input type="submit" value="Add"></td></tr>
+        </table>
     </form>
 <hr>
-<table border="1">
+<table border="1" width="100%">
     <thead>
     <tr>
         <th>id</th>
@@ -58,17 +59,21 @@ $all_banners = $sth->fetchAll();
     <tbody>
 <?php
 if ($all_banners) {
-    foreach ($all_banners as $banner) {
-        $banner['alias'] = $GLOBAL_SETTINGS['global']['site_href'] . $banner['alias'];
-    }
+    $site_href = $GLOBAL_SETTINGS['global']['site_href'];
+
+    $all_banners = array_map(function($banner) use ($site_href) {
+        $banner['alias'] = $site_href . 'banner.php?alias=' . $banner['alias'];
+        return $banner;
+    }, $all_banners);
+
     $all_banners[0]['alias'] = '';
-    $all_banners[0]['url'] = $GLOBAL_SETTINGS['global']['site_href'];
+    $all_banners[0]['url'] = $site_href;
 
     foreach ($all_banners as $banner) {
         echo <<<TR_BANNER
     <tr>
         <td>{$banner['id']}</td>
-        <td><code>{$banner['alias']}</code></td>
+        <td><a href="{$banner['alias']}">{$banner['alias']}</a></td>
         <td>{$banner['url']}</td>
         <td>{$banner['banner_owner']}</td>
         <td>{$banner['hits_all']}</td>

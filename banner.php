@@ -28,12 +28,14 @@ SELECT id FROM banner_list WHERE alias = :alias
 $sth = $dbh->prepare($query);
 $sth->execute(array( 'alias' => $alias ));
 
-$id_banner= $sth->fetch('id');
+$sth_answer = $sth->fetch(\PDO::FETCH_ASSOC);
 
-if (!$id_banner) {
+if (!$sth_answer) {
     http_response_code(404);
     die('Banner not exists.');
 }
+
+$id_banner = $sth_answer['id'];
 
 // обновляем данные по баннеру
 $query = "

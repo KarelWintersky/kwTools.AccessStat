@@ -32,11 +32,18 @@ $info = $sth->fetchAll();
 $dbh = null;
 
 ?>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Banner stats</title>
 </head>
 <body>
+<form action="backend.php?action=delete" method="post">
+    Password: <input type="text" name="password">...
+    <input type="hidden" value="<?php echo $id; ?>" name="banner_id">
+    <input type="hidden" value="<?php echo $_SERVER['HTTP_REFERER']; ?>" name="back_url">
+    <input type="submit" value="Delete this banner">
+</form>
 <table border="1" width="40%">
     <thead>
     <tr>
@@ -50,24 +57,16 @@ $dbh = null;
     if ($info) {
         foreach ($info as $row) {
             echo <<<TR_ROWS
-    <tr>
-        <td>{$row['dayvisit']}</td>
-        <td>{$row['ipv4']}</td>
-        <td>{$row['hits']}</td>
-    </tr>
+    <tr><td>{$row['dayvisit']}</td><td>{$row['ipv4']}</td><td>{$row['hits']}</td></tr>
 TR_ROWS;
         }
     } else {
         echo <<<TR_NOROWS
-    <tr>
-        <td colspan="3">No data. </td>
-    </tr>
+    <tr><td colspan="3">No data. </td></tr>
 TR_NOROWS;
-
     }
-
-
     ?>
+
     </tbody>
 </table>
 </body>
